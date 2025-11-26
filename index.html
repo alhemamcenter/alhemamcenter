@@ -119,13 +119,19 @@
             background: #fff; z-index: 99999;
             display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
-        .heartbeat-loader { width: 80px; height: 60px; }
-        .heartbeat-path {
-            stroke: #0891b2; stroke-width: 4; fill: none;
-            stroke-dasharray: 1000; stroke-dashoffset: 1000;
-            animation: dash 2s linear infinite;
+        
+        /* Logo Animation for Preloader */
+        .preloader-logo {
+            width: 150px;
+            height: auto;
+            animation: logo-breathe 2s ease-in-out infinite;
         }
-        @keyframes dash { to { stroke-dashoffset: 0; } }
+        
+        @keyframes logo-breathe {
+            0% { transform: scale(0.95); opacity: 0.7; filter: drop-shadow(0 0 0 rgba(8, 145, 178, 0)); }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 10px 20px rgba(8, 145, 178, 0.2)); }
+            100% { transform: scale(0.95); opacity: 0.7; filter: drop-shadow(0 0 0 rgba(8, 145, 178, 0)); }
+        }
 
         /* Video Intro Fixes */
         #video-intro {
@@ -212,11 +218,9 @@
     <div class="cursor-dot" data-cursor></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
-    <!-- Preloader (Text Removed) -->
+    <!-- Preloader with Animated Logo -->
     <div id="preloader">
-        <svg class="heartbeat-loader" viewBox="0 0 600 200">
-            <path class="heartbeat-path" d="M 0 100 L 200 100 L 230 10 L 260 190 L 290 100 L 600 100" />
-        </svg>
+        <img src="https://futuregardens1.com/wp-content/uploads/2025/11/logo1.png" alt="شعار مركز الهمم" class="preloader-logo">
     </div>
 
     <!-- Floating Whatsapp -->
