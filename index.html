@@ -152,19 +152,24 @@
         <i class="fa-solid fa-arrow-up"></i>
     </div>
 
-    <!-- Video Intro Section -->
-    <section id="video-intro">
-        <video autoplay muted loop playsinline class="hero-video">
-            <source src="https://futuregardens1.com/wp-content/uploads/2025/11/WhatsApp-Video-2025-11-26-at-17.27.01_582aeae0.mp4" type="video/mp4">
-        </video>
-        <div class="absolute inset-0 bg-black/30"></div> 
-        
-        <!-- Intro Overlay Content -->
-        <div class="absolute bottom-20 w-full text-center text-white z-10 animate-bounce">
-            <p class="text-lg font-light mb-2">اكتشف عالم الهمم</p>
-            <i class="fa-solid fa-chevron-down text-3xl"></i>
-        </div>
-    </section>
+<section id="video-intro">
+    <!-- 1. تم إضافة id="mainVideo" للفيديو -->
+    <video id="mainVideo" autoplay muted loop playsinline class="hero-video">
+        <source src="https://futuregardens1.com/wp-content/uploads/2025/11/WhatsApp-Video-2025-11-26-at-17.27.01_582aeae0.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 bg-black/30"></div> 
+    
+    <!-- 2. هذا هو زر تشغيل الصوت الجديد -->
+    <button onclick="toggleSound()" class="absolute bottom-32 right-8 z-20 bg-white/10 hover:bg-white/30 backdrop-blur-md text-white w-12 h-12 rounded-full flex items-center justify-center border border-white/20 transition-all duration-300 shadow-lg group" title="تشغيل الصوت">
+        <i id="soundIcon" class="fa-solid fa-volume-xmark text-xl group-hover:scale-110 transition-transform"></i>
+    </button>
+
+    <!-- محتوى المقدمة كما هو -->
+    <div class="absolute bottom-20 w-full text-center text-white z-10 animate-bounce">
+        <p class="text-lg font-light mb-2">اكتشف عالم الهمم</p>
+        <i class="fa-solid fa-chevron-down text-3xl"></i>
+    </div>
+</section>
 
     <!-- Navbar -->
     <nav class="glass-nav fixed w-full z-50 transition-all duration-300 top-0" id="navbar">
@@ -804,6 +809,66 @@ function showCouponManual() {
         title: 'تم تفعيل الهدية بنجاح'
     })
 }
+
+        // --- متغير لتتبع حالة النموذج ---
+    let isFormSubmitted = false;
+
+    // --- الاستماع لرسالة JotForm ---
+    window.addEventListener("message", function(event) {
+        if (event.data && (event.data.action === "submission-completed" || (typeof event.data === "string" && event.data.includes("submission-completed")))) {
+            isFormSubmitted = true; 
+            // إظهار رسالة النجاح
+            const successMsg = document.getElementById('successMessage');
+            if(successMsg) successMsg.classList.remove('hidden');
+        }
+    });
+
+    // --- دالة تشغيل/كتم صوت الفيديو (الجديدة) ---
+    function toggleSound() {
+        const video = document.getElementById('mainVideo');
+        const icon = document.getElementById('soundIcon');
+        
+        if (video.muted) {
+            video.muted = false; // تشغيل الصوت
+            icon.classList.remove('fa-volume-xmark');
+            icon.classList.add('fa-volume-high');
+        } else {
+            video.muted = true; // كتم الصوت
+            icon.classList.remove('fa-volume-high');
+            icon.classList.add('fa-volume-xmark');
+        }
+    }
+
+    // --- دالة الزر "استلام الهدية" مع التحقق ---
+    function showCouponManual() {
+        // التحقق: هل قام العميل بالتسجيل؟
+        if (!isFormSubmitted) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'عفواً',
+                text: 'من فضلك سجل بياناتك في النموذج أعلاه أولاً للحصول على الهدية',
+                confirmButtonText: 'حسناً',
+                confirmButtonColor: '#0891b2'
+            });
+            return; 
+        }
+
+        // إخفاء الفورم وإظهار الكوبون
+        document.getElementById('leadFormContainer').style.display = 'none';
+        document.getElementById('couponResult').classList.remove('hidden');
+        
+        launchConfetti(); // تشغيل الاحتفالية
+        
+        // رسالة نجاح منبثقة
+        const Toast = Swal.mixin({
+            toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        Toast.fire({ icon: 'success', title: 'تم تفعيل الهدية بنجاح' })
+    }
     </script>
 </body>
 </html>
