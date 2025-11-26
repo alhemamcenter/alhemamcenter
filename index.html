@@ -142,11 +142,11 @@
             background: #0f172a; /* Fallback color */
         }
         .hero-video {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            min-width: 100%; min-height: 100%;
-            width: auto; height: auto;
-            /* Changed to COVER to fill screen, eliminating white bars */
+            position: absolute; 
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            /* 'cover' fills the screen without stretching/distorting the video. 
+               It crops edges if aspect ratio doesn't match. */
             object-fit: cover; 
             z-index: 0;
         }
@@ -268,8 +268,8 @@
     <nav class="glass-nav fixed w-full z-50 transition-all duration-300 top-0" id="navbar">
         <div class="w-full px-4 py-2 flex justify-between items-center">
             <a href="#" class="flex items-center gap-2 md:gap-3 hover-target shrink-0">
-                <!-- Adjusted logo height for mobile -->
-                <img src="https://futuregardens1.com/wp-content/uploads/2025/11/logo1.png" alt="شعار مركز الهمم" class="h-10 md:h-16 w-auto object-contain">
+                <!-- Adjusted logo height to be bigger: h-14 on mobile, h-20 on desktop -->
+                <img src="https://futuregardens1.com/wp-content/uploads/2025/11/logo1.png" alt="شعار مركز الهمم" class="h-14 md:h-20 w-auto object-contain transition-all duration-300">
             </a>
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-6 font-medium text-gray-600">
