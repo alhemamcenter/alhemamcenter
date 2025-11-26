@@ -478,17 +478,25 @@
                         </div>
 
                         <!-- JotForm Script -->
-                        <div class="w-full h-auto min-h-[500px]">
+                        <div class="w-full h-auto min-h-[500px] relative">
                             <script type="text/javascript" src="https://form.jotform.com/jsform/253295126869065"></script>
                         </div>
                         
-                        <!-- Manual Trigger for Coupon (Since we can't detect JotForm submit easily cross-origin) -->
-                        <div class="mt-6 text-center border-t border-gray-100 pt-6">
-                            <p class="text-sm text-gray-500 mb-3">هل أتممت التسجيل في النموذج أعلاه؟</p>
-                            <button onclick="showCouponManual()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 mx-auto">
-                                <i class="fa-solid fa-gift animate-bounce"></i> اضغط هنا لاستلام هديتك
+                        <!-- Manual Trigger for Coupon (Hidden by default, shown after submission) -->
+                        <div id="manualCouponTrigger" class="mt-6 text-center border-t border-gray-100 pt-6 hidden">
+                            <p class="text-sm text-green-600 font-bold mb-3 animate-pulse">تم تسجيل بياناتك بنجاح!</p>
+                            <button onclick="showCouponManual()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 mx-auto animate-bounce">
+                                <i class="fa-solid fa-gift"></i> اضغط هنا لاستلام هديتك
                             </button>
                         </div>
+
+                        <!-- Fallback message in case script doesn't catch the event (Optional UX safety) -->
+                         <div id="fallbackMessage" class="mt-4 text-center hidden">
+                            <p class="text-xs text-gray-400">
+                                هل سجلت ولم يظهر الزر؟ <button onclick="document.getElementById('manualCouponTrigger').classList.remove('hidden'); this.parentElement.style.display='none'" class="text-primary underline">اضغط هنا</button>
+                            </p>
+                        </div>
+
                     </div>
 
                     <!-- Coupon Result (Hidden) -->
@@ -638,6 +646,36 @@
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // --- JOTFORM SUBMISSION LISTENER ---
+        // This listens for the "submission-completed" message from JotForm
+        window.addEventListener("message", function(event) {
+            // Verify origin for security (optional but recommended, allowing all for now to ensure it works)
+            // Check if the message is from JotForm and indicates submission
+            if (event.data && (event.data.action === "submission-completed" || (typeof event.data === "string" && event.data.includes("submission-completed")))) {
+                
+                // 1. Show the manual trigger button
+                const triggerDiv = document.getElementById('manualCouponTrigger');
+                triggerDiv.classList.remove('hidden');
+                
+                // 2. Hide the fallback link to avoid clutter
+                document.getElementById('fallbackMessage').style.display = 'none';
+
+                // 3. Scroll to the button so the user sees it
+                triggerDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Optional: You can auto-trigger it after a delay if you prefer
+                // setTimeout(showCouponManual, 2000); 
+            }
+        });
+
+        // Show fallback link after 15 seconds (in case user submitted but event didn't fire due to browser restrictions)
+        setTimeout(() => {
+            const formContainer = document.getElementById('leadFormContainer');
+            if (formContainer.style.display !== 'none') { // Only if form is still visible
+                document.getElementById('fallbackMessage').classList.remove('hidden');
+            }
+        }, 15000);
 
         // Confetti Logic (Reliable)
         function launchConfetti() {
