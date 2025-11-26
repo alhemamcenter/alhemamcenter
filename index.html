@@ -767,6 +767,22 @@ window.addEventListener("message", function(event) {
     }
 });
 
+            // --- دالة تشغيل/كتم صوت الفيديو (الجديدة) ---
+    function toggleSound() {
+        const video = document.getElementById('mainVideo');
+        const icon = document.getElementById('soundIcon');
+        
+        if (video.muted) {
+            video.muted = false; // تشغيل الصوت
+            icon.classList.remove('fa-volume-xmark');
+            icon.classList.add('fa-volume-high');
+        } else {
+            video.muted = true; // كتم الصوت
+            icon.classList.remove('fa-volume-high');
+            icon.classList.add('fa-volume-xmark');
+        }
+    }
+
 // دالة الزر "استلام الهدية"
 function showCouponManual() {
     
@@ -810,65 +826,7 @@ function showCouponManual() {
     })
 }
 
-        // --- متغير لتتبع حالة النموذج ---
-    let isFormSubmitted = false;
 
-    // --- الاستماع لرسالة JotForm ---
-    window.addEventListener("message", function(event) {
-        if (event.data && (event.data.action === "submission-completed" || (typeof event.data === "string" && event.data.includes("submission-completed")))) {
-            isFormSubmitted = true; 
-            // إظهار رسالة النجاح
-            const successMsg = document.getElementById('successMessage');
-            if(successMsg) successMsg.classList.remove('hidden');
-        }
-    });
-
-    // --- دالة تشغيل/كتم صوت الفيديو (الجديدة) ---
-    function toggleSound() {
-        const video = document.getElementById('mainVideo');
-        const icon = document.getElementById('soundIcon');
-        
-        if (video.muted) {
-            video.muted = false; // تشغيل الصوت
-            icon.classList.remove('fa-volume-xmark');
-            icon.classList.add('fa-volume-high');
-        } else {
-            video.muted = true; // كتم الصوت
-            icon.classList.remove('fa-volume-high');
-            icon.classList.add('fa-volume-xmark');
-        }
-    }
-
-    // --- دالة الزر "استلام الهدية" مع التحقق ---
-    function showCouponManual() {
-        // التحقق: هل قام العميل بالتسجيل؟
-        if (!isFormSubmitted) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'عفواً',
-                text: 'من فضلك سجل بياناتك في النموذج أعلاه أولاً للحصول على الهدية',
-                confirmButtonText: 'حسناً',
-                confirmButtonColor: '#0891b2'
-            });
-            return; 
-        }
-
-        // إخفاء الفورم وإظهار الكوبون
-        document.getElementById('leadFormContainer').style.display = 'none';
-        document.getElementById('couponResult').classList.remove('hidden');
-        
-        launchConfetti(); // تشغيل الاحتفالية
-        
-        // رسالة نجاح منبثقة
-        const Toast = Swal.mixin({
-            toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-        Toast.fire({ icon: 'success', title: 'تم تفعيل الهدية بنجاح' })
-    }
     </script>
 </body>
 </html>
