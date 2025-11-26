@@ -44,12 +44,12 @@
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'shine': 'shine 3s infinite',
-                        'mobile-float': 'float 4s ease-in-out infinite', // Faster float for mobile
+                        'mobile-float': 'float 4s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-15px)' }, // Subtle movement
+                            '50%': { transform: 'translateY(-15px)' },
                         },
                         shine: {
                             '0%': { left: '-100%' },
@@ -62,8 +62,15 @@
         }
     </script>
     <style>
-        body { font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
-        
+        /* GLOBAL RESET & OVERFLOW FIX */
+        html, body {
+            width: 100%;
+            overflow-x: hidden; /* Critical for mobile white bar fix */
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -71,17 +78,12 @@
 
         /* --- DESKTOP ONLY STYLES --- */
         @media (hover: hover) and (pointer: fine) {
-            body { cursor: none; } /* Hide default cursor only on PC */
+            body { cursor: none; }
             
-            .cursor-dot,
-            .cursor-outline {
-                display: block;
-                position: fixed;
-                top: 0; left: 0;
-                transform: translate(-50%, -50%);
-                border-radius: 50%;
-                z-index: 9999;
-                pointer-events: none;
+            .cursor-dot, .cursor-outline {
+                display: block; position: fixed; top: 0; left: 0;
+                transform: translate(-50%, -50%); border-radius: 50%;
+                z-index: 9999; pointer-events: none;
             }
             .cursor-dot { width: 8px; height: 8px; background-color: #0891b2; }
             .cursor-outline {
@@ -91,23 +93,16 @@
             }
             body.hovering .cursor-outline {
                 width: 60px; height: 60px;
-                background-color: rgba(8, 145, 178, 0.1);
-                border-color: transparent;
+                background-color: rgba(8, 145, 178, 0.1); border-color: transparent;
             }
         }
 
         /* --- MOBILE OPTIMIZATIONS --- */
         @media (hover: none) {
-            .cursor-dot, .cursor-outline { display: none !important; } /* Hide custom cursor on mobile */
+            .cursor-dot, .cursor-outline { display: none !important; }
             body { cursor: auto !important; }
-            
-            /* Disable magnetic effect on touch */
             .magnetic-btn { transform: none !important; }
-            
-            /* Auto-animate cards on mobile instead of tilt */
-            .tilt-card {
-                animation: float 5s ease-in-out infinite;
-            }
+            .tilt-card { animation: float 5s ease-in-out infinite; }
         }
 
         /* Shine Effect */
@@ -132,20 +127,22 @@
         }
         @keyframes dash { to { stroke-dashoffset: 0; } }
 
-        /* Video Styles - Mobile Optimized */
+        /* Video Intro Fixes */
         #video-intro {
             position: relative; 
-            height: 100vh; /* Fallback */
             height: 100dvh; /* Mobile viewport fix */
+            width: 100%;
             overflow: hidden;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background: #0f172a; /* Fallback color */
         }
         .hero-video {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 100%; height: 100%;
-            object-fit: contain; z-index: 0;
-            max-width: 100%; max-height: 100%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            /* Changed to COVER to fill screen, eliminating white bars */
+            object-fit: cover; 
+            z-index: 0;
         }
         .video-background-blur {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -194,7 +191,7 @@
         /* Particles */
         .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.15); /* More visible */
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             pointer-events: none;
             animation: float-up 10s linear infinite;
@@ -205,23 +202,21 @@
             100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
         
-        /* 3D Settings */
         .tilt-card { transform-style: preserve-3d; perspective: 1000px; }
         .tilt-inner { transform: translateZ(20px); }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased overflow-x-hidden" id="top">
 
-    <!-- Custom Cursor (Visible only on Desktop) -->
+    <!-- Custom Cursor -->
     <div class="cursor-dot" data-cursor></div>
     <div class="cursor-outline" data-cursor-outline></div>
 
-    <!-- Preloader -->
+    <!-- Preloader (Text Removed) -->
     <div id="preloader">
         <svg class="heartbeat-loader" viewBox="0 0 600 200">
             <path class="heartbeat-path" d="M 0 100 L 200 100 L 230 10 L 260 190 L 290 100 L 600 100" />
         </svg>
-        <p class="mt-4 text-primary font-bold text-xl animate-pulse">جاري تجهيز بيئة طفلك...</p>
     </div>
 
     <!-- Floating Whatsapp -->
@@ -229,49 +224,48 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- Scroll To Top Button -->
+    <!-- Scroll To Top -->
     <div class="scroll-to-top hover-target bg-primary hover:bg-primaryDark w-12 h-12 rounded-full flex items-center justify-center text-white text-2xl shadow-lg" onclick="scrollToTop()">
         <i class="fa-solid fa-arrow-up"></i>
     </div>
 
-<section id="video-intro">
-    <div class="video-background-blur"></div>
-    <!-- Particles -->
-    <div id="particles-container" class="absolute inset-0 overflow-hidden z-10 pointer-events-none"></div>
+    <section id="video-intro">
+        <div class="video-background-blur"></div>
+        <div id="particles-container" class="absolute inset-0 overflow-hidden z-10 pointer-events-none"></div>
 
-    <video 
-        id="mainVideo" 
-        autoplay 
-        muted 
-        loop 
-        playsinline 
-        webkit-playsinline
-        poster="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-        class="hero-video"
-        oncanplay="this.play()"
-        onerror="this.style.display='none'; document.querySelector('.video-background-blur').style.filter='none'; document.querySelector('.video-background-blur').style.opacity='0.6';"
-    >
-        <source src="https://futuregardens1.com/wp-content/uploads/2025/11/WhatsApp-Video-2025-11-26-at-17.27.01_582aeae0.mp4" type="video/mp4">
-    </video>
+        <video 
+            id="mainVideo" 
+            autoplay 
+            muted 
+            loop 
+            playsinline 
+            webkit-playsinline
+            poster="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+            class="hero-video"
+            oncanplay="this.play()"
+            onerror="this.style.display='none'; document.querySelector('.video-background-blur').style.filter='none'; document.querySelector('.video-background-blur').style.opacity='0.6';"
+        >
+            <source src="https://futuregardens1.com/wp-content/uploads/2025/11/WhatsApp-Video-2025-11-26-at-17.27.01_582aeae0.mp4" type="video/mp4">
+        </video>
 
-    <div class="absolute inset-0 bg-black/40 z-10 pointer-events-none"></div> 
-    
-    <!-- Sound Button (Position adjusted for mobile) -->
-    <button onclick="toggleSound()" class="hover-target absolute bottom-24 md:bottom-32 right-6 md:right-8 z-20 bg-white/10 hover:bg-white/30 backdrop-blur-md text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border border-white/20 transition-all duration-300 shadow-lg group opacity-0 gsap-hero-ui magnetic-btn" title="تشغيل الصوت">
-        <i id="soundIcon" class="fa-solid fa-volume-xmark text-lg md:text-xl group-hover:scale-110 transition-transform"></i>
-    </button>
+        <div class="absolute inset-0 bg-black/40 z-10 pointer-events-none"></div> 
+        
+        <button onclick="toggleSound()" class="hover-target absolute bottom-24 md:bottom-32 right-6 md:right-8 z-20 bg-white/10 hover:bg-white/30 backdrop-blur-md text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border border-white/20 transition-all duration-300 shadow-lg group opacity-0 gsap-hero-ui magnetic-btn" title="تشغيل الصوت">
+            <i id="soundIcon" class="fa-solid fa-volume-xmark text-lg md:text-xl group-hover:scale-110 transition-transform"></i>
+        </button>
 
-    <div class="absolute bottom-16 md:bottom-20 w-full text-center text-white z-10">
-        <p class="text-base md:text-lg font-light mb-2 opacity-0 gsap-hero-ui">اكتشف عالم الهمم</p>
-        <i class="fa-solid fa-chevron-down text-2xl md:text-3xl opacity-0 gsap-hero-ui animate-bounce"></i>
-    </div>
-</section>
+        <div class="absolute bottom-16 md:bottom-20 w-full text-center text-white z-10">
+            <p class="text-base md:text-lg font-light mb-2 opacity-0 gsap-hero-ui">اكتشف عالم الهمم</p>
+            <i class="fa-solid fa-chevron-down text-2xl md:text-3xl opacity-0 gsap-hero-ui animate-bounce"></i>
+        </div>
+    </section>
 
     <!-- Navbar -->
     <nav class="glass-nav fixed w-full z-50 transition-all duration-300 top-0" id="navbar">
-        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-            <a href="#" class="flex items-center gap-2 md:gap-3 hover-target">
-                <img src="https://futuregardens1.com/wp-content/uploads/2025/11/logo1.png" alt="شعار مركز الهمم" class="h-12 md:h-16 w-auto object-contain">
+        <div class="w-full px-4 py-2 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 md:gap-3 hover-target shrink-0">
+                <!-- Adjusted logo height for mobile -->
+                <img src="https://futuregardens1.com/wp-content/uploads/2025/11/logo1.png" alt="شعار مركز الهمم" class="h-10 md:h-16 w-auto object-contain">
             </a>
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-6 font-medium text-gray-600">
@@ -280,16 +274,15 @@
                 <a href="#testimonials" class="hover:text-primary transition hover-target">قالوا عنا</a>
                 <a href="#contact" class="hover:text-primary transition hover-target">اتصل بنا</a>
             </div>
-            <a href="#register-section" class="hover-target magnetic-btn bg-primary hover:bg-primaryDark text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold shadow-lg transition transform hover:scale-105 text-xs md:text-base">
+            <!-- Adjusted button padding/text for mobile -->
+            <a href="#register-section" class="hover-target magnetic-btn bg-primary hover:bg-primaryDark text-white px-3 md:px-6 py-2 md:py-2.5 rounded-full font-bold shadow-lg transition transform hover:scale-105 text-[10px] md:text-base shrink-0 whitespace-nowrap">
                 <i class="fa-regular fa-calendar-check ml-1 md:ml-2"></i> استشارة مجانية
             </a>
         </div>
     </nav>
 
     <!-- Hero Text Section -->
-    <!-- Changed h-[70vh] to min-h-screen for mobile to give more breathing room -->
     <header class="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center text-white overflow-hidden bg-gradient-to-br from-secondary to-primaryDark py-20 md:py-0">
-        <!-- Abstract Shapes Background -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
              <div class="absolute top-10 left-10 w-40 md:w-64 h-40 md:h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
              <div class="absolute bottom-10 right-10 w-60 md:w-96 h-60 md:h-96 bg-primary/20 rounded-full blur-3xl animate-float"></div>
@@ -299,7 +292,6 @@
             <span class="gsap-hero-text inline-block py-1 px-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-xs md:text-base mb-4 font-light tracking-wide">
                 ✨ رعاية متخصصة بأحدث المعايير العالمية
             </span>
-            <!-- Responsive Font Sizes -->
             <h1 class="text-3xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-2xl overflow-hidden">
                 <div class="gsap-hero-text">مـركـز الـهـمـم</div>
                 <div class="gsap-hero-text text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-200 py-1">شريكك في رحلة الأمل</div>
@@ -309,7 +301,6 @@
                 <strong>لأن طفلك يستحق أفضل بداية ممكنة.</strong>
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center gsap-hero-text w-full">
-                <!-- Buttons Full Width on Mobile -->
                 <a href="#register-section" class="hover-target magnetic-btn btn-shine group bg-accent hover:bg-amber-600 text-white text-lg md:text-xl font-bold py-3 md:py-4 px-8 md:px-12 rounded-full shadow-[0_0_30px_rgba(245,158,11,0.5)] transition transform border-2 border-transparent hover:border-white/20 relative z-10 w-full sm:w-auto text-center">
                     <span class="group-hover:animate-pulse">🎁 اكشف هديتك الآن</span>
                 </a>
@@ -414,11 +405,8 @@
             <h2 class="text-2xl md:text-4xl font-bold text-center mb-10 md:mb-16 text-secondary gsap-fade-up">رحلة طفلك معنا خطوة بخطوة</h2>
             
             <div class="relative">
-                <!-- Line Connector (Vertical on mobile, horizontal on desktop) -->
                 <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 z-0"></div>
                 <div class="hidden md:block absolute top-1/2 left-0 h-1 bg-primary -translate-y-1/2 z-0 journey-line-progress" style="width: 0%"></div>
-                
-                <!-- Vertical Line for Mobile -->
                 <div class="md:hidden absolute top-0 right-1/2 w-1 h-full bg-gray-100 -translate-x-1/2 z-0"></div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
