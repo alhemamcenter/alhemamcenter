@@ -483,12 +483,17 @@
                         </div>
                         
                         <!-- Manual Trigger for Coupon (Hidden by default, shown after submission) -->
-                        <div id="manualCouponTrigger" class="mt-6 text-center border-t border-gray-100 pt-6 hidden">
-                            <p class="text-sm text-green-600 font-bold mb-3 animate-pulse">تم تسجيل بياناتك بنجاح!</p>
-                            <button onclick="showCouponManual()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 mx-auto animate-bounce">
-                                <i class="fa-solid fa-gift"></i> اضغط هنا لاستلام هديتك
-                            </button>
-                        </div>
+                   <!-- Manual Trigger for Coupon (Visible, logic controlled by JS) -->
+<div id="manualCouponTrigger" class="mt-6 text-center border-t border-gray-100 pt-6">
+    <!-- Success Message (Initially Hidden) -->
+    <p id="successMessage" class="hidden text-sm text-green-600 font-bold mb-3 animate-pulse">
+        <i class="fa-solid fa-check-circle"></i> تم تسجيل بياناتك بنجاح! يمكنك استلام الهدية الآن.
+    </p>
+
+    <button onclick="showCouponManual()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 mx-auto animate-bounce">
+        <i class="fa-solid fa-gift"></i> اضغط هنا لاستلام هديتك
+    </button>
+</div>
 
                         <!-- Fallback message in case script doesn't catch the event (Optional UX safety) -->
                          <div id="fallbackMessage" class="mt-4 text-center hidden">
@@ -739,6 +744,66 @@
                 timer: 1500
             });
         }
+
+        // 1. متغير لتتبع حالة النموذج (هل تم الإرسال أم لا)
+let isFormSubmitted = false;
+
+// --- JOTFORM SUBMISSION LISTENER ---
+// الاستماع لرسالة تأكيد الإرسال القادمة من JotForm
+window.addEventListener("message", function(event) {
+    // التحقق من أن الرسالة قادمة من JotForm وتفيد بانتهاء التسجيل
+    if (event.data && (event.data.action === "submission-completed" || (typeof event.data === "string" && event.data.includes("submission-completed")))) {
+        
+        isFormSubmitted = true; // تغيير الحالة إلى "تم التسجيل"
+
+        // إظهار رسالة نصية صغيرة فوق الزر لطمأنة العميل
+        const successMsg = document.getElementById('successMessage');
+        if(successMsg) successMsg.classList.remove('hidden');
+    }
+});
+
+// دالة الزر "استلام الهدية"
+function showCouponManual() {
+    
+    // 2. التحقق: هل قام العميل بالتسجيل؟
+    if (!isFormSubmitted) {
+        // إذا لم يسجل، أظهر رسالة تنبيه
+        Swal.fire({
+            icon: 'warning',
+            title: 'عفواً',
+            text: 'من فضلك سجل بياناتك في النموذج أعلاه أولاً للحصول على الهدية',
+            confirmButtonText: 'حسناً',
+            confirmButtonColor: '#0891b2'
+        });
+        return; // توقف هنا ولا تكمل الكود
+    }
+
+    // إذا كان قد سجل، أكمل عملية فتح الهدية
+    // إخفاء الفورم وإظهار الكوبون
+    document.getElementById('leadFormContainer').style.display = 'none';
+    document.getElementById('couponResult').classList.remove('hidden');
+    
+    // تشغيل الاحتفالية
+    launchConfetti();
+    
+    // إظهار رسالة نجاح صغيرة
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'success',
+        title: 'تم تفعيل الهدية بنجاح'
+    })
+}
     </script>
 </body>
 </html>
