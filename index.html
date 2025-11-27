@@ -143,11 +143,11 @@
         }
         .hero-video {
             position: absolute; 
-            top: 0; left: 0;
+            top: 50%; left: 50%; /* Center the video */
+            transform: translate(-50%, -50%); /* Center the video */
             width: 100%; height: 100%;
-            /* 'cover' fills the screen without stretching/distorting the video. 
-               It crops edges if aspect ratio doesn't match. */
-            object-fit: contain; 
+            /* Changed to CONTAIN to show the video in its natural ratio without stretching/cropping */
+            object-fit: contain; /* <== التعديل المطلوب: عرض الفيديو بأبعاده الطبيعية كاملة */
             z-index: 0;
         }
         .video-background-blur {
@@ -249,7 +249,7 @@
             oncanplay="this.play()"
             onerror="this.style.display='none'; document.querySelector('.video-background-blur').style.filter='none'; document.querySelector('.video-background-blur').style.opacity='0.6';"
         >
-            <source src="https://futuregardens1.com/wp-content/uploads/2025/11/WhatsApp-Video-2025-11-27-at-10.35.13_7cbe82e9.mp4" type="video/mp4">
+            <source src="https://futuregardens1.com/wp-content/uploads/2025/11/WhatsApp-Video-2025-11-26-at-17.27.01_582aeae0.mp4" type="video/mp4">
         </video>
 
         <div class="absolute inset-0 bg-black/40 z-10 pointer-events-none"></div> 
@@ -268,7 +268,7 @@
     <nav class="glass-nav fixed w-full z-50 transition-all duration-300 top-0" id="navbar">
         <div class="w-full px-4 py-2 flex justify-between items-center">
             <a href="#" class="flex items-center gap-2 md:gap-3 hover-target shrink-0">
-                <!-- Adjusted logo height to be bigger: h-14 on mobile, h-20 on desktop -->
+                <!-- Logo height is now h-14 on mobile and h-20 on desktop -->
                 <img src="https://futuregardens1.com/wp-content/uploads/2025/11/logo1.png" alt="شعار مركز الهمم" class="h-14 md:h-20 w-auto object-contain transition-all duration-300">
             </a>
             <!-- Desktop Menu -->
@@ -343,7 +343,7 @@
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- Services Section (Updated with detailed categories) -->
     <section id="services" class="py-16 md:py-24 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-10 md:mb-16 gsap-fade-up">
@@ -351,54 +351,89 @@
                 <h2 class="text-2xl md:text-5xl font-bold mt-4 text-secondary">رعاية شاملة تحت سقف واحد</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-                <!-- Service 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                
+                <!-- Service 1: القسم النفسي (Psychological) -->
+                <div class="service-card tilt-card bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 relative overflow-hidden group hover-target">
+                    <div class="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-purple-50 rounded-bl-[100%] -mr-10 -mt-10 transition group-hover:bg-purple-100"></div>
+                    <div class="tilt-inner">
+                        <div class="w-14 h-14 md:w-16 md:h-16 bg-purple-500 text-white rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-4 md:mb-6 shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">القسم النفسي والقياس</h3>
+                        <ul class="space-y-2 text-gray-600 text-sm md:text-base list-disc pr-8 text-right">
+                            <li>جلسات تعديل السلوك</li>
+                            <li>جلسات ABA</li>
+                            <li>جلسات تنمية المهارات</li>
+                            <li>جلسات التدخل المبكر</li>
+                            <li>جلسات العلاج النفسي</li>
+                            <li>اختبار الذكاء</li>
+                            <li>فحص اضطرابات طيف التوحد</li>
+                            <li>اختبار فرط الحركة</li>
+                            <li>تقييم ABA</li>
+                            <li>اختبار كارز (CARS)</li>
+                            <li>مقياس الاكتئاب</li>
+                            <li>اختبار فينلاند</li>
+                            <li>مقياس الوسواس القهري</li>
+                            <li>مقاييس التوتر والقلق</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 2: قسم التخاطب واللغة (Speech) -->
                 <div class="service-card tilt-card bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 relative overflow-hidden group hover-target">
                     <div class="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-blue-50 rounded-bl-[100%] -mr-10 -mt-10 transition group-hover:bg-blue-100"></div>
                     <div class="tilt-inner">
                         <div class="w-14 h-14 md:w-16 md:h-16 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-4 md:mb-6 shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-microphone-lines"></i>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">التخاطب والنطق</h3>
-                        <ul class="space-y-2 md:space-y-3 text-gray-600 text-sm md:text-base">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> علاج التأتأة واضطرابات الصوت</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> تحسين مخارج الحروف</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> تأهيل حالات تأخر الكلام</li>
+                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">التخاطب واللغة</h3>
+                        <ul class="space-y-2 text-gray-600 text-sm md:text-base list-disc pr-8 text-right">
+                            <li>جلسات التخاطب</li>
+                            <li>جلسات علاج التأتأة</li>
+                            <li>جلسات علاج مشاكل الصوت</li>
+                            <li>جلسات تحسين النطق</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Service 2 -->
+                <!-- Service 3: القسم السمعي (Audiology) -->
                 <div class="service-card tilt-card bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 relative overflow-hidden group hover-target">
                     <div class="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-teal-50 rounded-bl-[100%] -mr-10 -mt-10 transition group-hover:bg-teal-100"></div>
                     <div class="tilt-inner">
                         <div class="w-14 h-14 md:w-16 md:h-16 bg-teal-500 text-white rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-4 md:mb-6 shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-ear-deaf"></i>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">السمعيات والتوازن</h3>
-                        <ul class="space-y-2 md:space-y-3 text-gray-600 text-sm md:text-base">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> فحص السمع وضغط الأذن</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> برمجة القوقعة والسماعات</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> المسح السمعي لحديثي الولادة</li>
+                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">القسم السمعي</h3>
+                        <ul class="space-y-2 text-gray-600 text-sm md:text-base list-disc pr-8 text-right">
+                            <li>تأهيل سمعي</li>
+                            <li>برمجة القوقعة والسماعة الطبية</li>
+                            <li>فحص السمع (جميع الأنواع)</li>
+                            <li>فحص قياس ضغط الأذن</li>
+                            <li>المسح السمعي لحديثي الولادة</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Service 3 -->
+                <!-- Service 4: العلاج الوظيفي (Occupational Therapy) -->
                 <div class="service-card tilt-card bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 relative overflow-hidden group hover-target">
-                    <div class="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-purple-50 rounded-bl-[100%] -mr-10 -mt-10 transition group-hover:bg-purple-100"></div>
+                    <div class="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-amber-50 rounded-bl-[100%] -mr-10 -mt-10 transition group-hover:bg-amber-100"></div>
                     <div class="tilt-inner">
-                        <div class="w-14 h-14 md:w-16 md:h-16 bg-purple-500 text-white rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-4 md:mb-6 shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid fa-puzzle-piece"></i>
+                        <div class="w-14 h-14 md:w-16 md:h-16 bg-amber-500 text-white rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-4 md:mb-6 shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-hand-holding-medical"></i>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">النفسي وتعديل السلوك</h3>
-                        <ul class="space-y-2 md:space-y-3 text-gray-600 text-sm md:text-base">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> جلسات ABA وتنمية المهارات</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> اختبارات الذكاء والتوحد</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-primary text-xs"></i> علاج فرط الحركة وتشتت الانتباه</li>
+                        <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-secondary">العلاج الوظيفي</h3>
+                        <ul class="space-y-2 text-gray-600 text-sm md:text-base list-disc pr-8 text-right">
+                            <li>جلسات تكامل حسي</li>
+                            <li>جلسات علاج وظيفي</li>
+                            <li>جلسات علاج تشتت الانتباه</li>
+                            <li>حالات التوحد</li>
+                            <li>حالات متلازمة داون</li>
+                            <li>تدخل أكاديمي والدمج</li>
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
